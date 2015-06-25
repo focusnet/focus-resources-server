@@ -2,3 +2,5 @@
 *~
 www/config.php
 www/contrib/
+composer.lock
+composer.phar
