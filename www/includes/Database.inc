@@ -114,7 +114,7 @@ class Database
 
 		$res = $this->mysqli->query($query);
 		if(!$res) { 
-			Error::httpApplicationError('Cannot fetch resource.');
+			Error::httpApplicationError('Database connection error.');
 		}
 		
 		if (!($row = $res->fetch_row()) || !isset($row[0])) {

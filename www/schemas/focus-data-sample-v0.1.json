@@ -5,7 +5,7 @@
     "description": "This object defines the basic structure for storing a flat data array.",
     "allOf": [
         {
-            "$ref": "http://schemas.focusnet.eu/repository/focus-object/v0.1#/definitions/metadata"
+            "$ref": "http://reference.focusnet.eu/schemas/focus-object/v0.1#/definitions/metadata"
         },
         {
             "type": "object",

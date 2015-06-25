@@ -5,6 +5,10 @@
  * file that was distributed with this source code.
  */
  
+ POST can conflict with deleted version because of retention policy
+ 
+ put schemas in other repo
+ 
  GET <resource>
 	1. access control checks
 	2. resource exists? if not error

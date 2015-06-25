@@ -5,6 +5,7 @@
 -- file that was distributed with this source code.
 --
 
+-- Samples
 DROP TABLE IF EXISTS samples;
 
 CREATE TABLE IF NOT EXISTS samples (
