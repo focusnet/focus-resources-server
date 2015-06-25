@@ -30,7 +30,7 @@ This server ensures that stored resources are valid in the context of the FOCUS 
 
 In short, any data being stored in the resource server is a valid JSON object that respects at least the focus-object JSON schema.
 
-All JSON schemas are stored in the `www/schemas/` directory. It is possible for every resources server to define its own JSON schemas, and to let other participants of the FOCUS solution to use them to instantiate new objects. FIXME move to own repo.
+All JSON schemas defined by the FOCUS consortium are stored in the `focus-data-model` github repository. It is possible for other participants to define their own JSON schemas, and to let other participants of the FOCUS solution use them to instantiate new objects. 
 
 If JSON schemas evolve, they must remain compatible with earlier versions. This garantees that older equipments and services will still be able to be understood by their newer counterparts. 
 
@@ -45,6 +45,8 @@ Beside the information that one can find in the base focus-object object, this r
 ### REST (CRUD) operations
 
 In this section, we will consider that the resources server was deployed on http://data.example.org/.
+
+The HTTP protocol is followed and appropriate status codes are returned.
 
 #### Resource creation (POST)
 
@@ -81,6 +83,9 @@ This request returns:
  - FIXME
 
 ### Resource update (PUT)
+
+focus-datamodel
+focus-data-model
 
 To upate an existing resource, issue a PUT HTTP request toward the URL of the existing resource:
 
