@@ -20,7 +20,7 @@ class Validator extends JsonSchema\Uri\Retrievers\FileGetContents implements Jso
 	/**
 	 * Root schema
 	 */
-	public static $ROOT_FOCUS_SCHEMAS = 'http://schemas.focusnet.eu/repository/';
+	public static $ROOT_FOCUS_SCHEMAS = 'http://reference.focusnet.eu/schemas/';
 	public static $FOCUS_OBJECT_SCHEMA_VERSION = 0.1;
 	
 	/**
@@ -88,7 +88,6 @@ class Validator extends JsonSchema\Uri\Retrievers\FileGetContents implements Jso
 		if ($alt_root_focus_schemas) {
 			$uri = preg_replace('|^' . self::$ROOT_FOCUS_SCHEMAS . '|', $alt_root_focus_schemas, $uri);
 		}
-		var_dump($uri);
 		
 		$data = FALSE;
 		$filename = FALSE;

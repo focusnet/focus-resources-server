@@ -15,7 +15,7 @@ require_once 'includes/Error.inc';
  */
 class Configuration
 {
-	private $conf = [];
+	private $conf = array();
 	
 	/**
 	 * Instance reference

@@ -152,7 +152,7 @@ class Rest
 	{
 		// augment with required data
 		// == server-side contribution
-		$o = (object)[];
+		$o = (object)array();
 		$o->url = $resource;
 		$o->version = 1;
 		$o->owner = Authentication::getInstance()->getUserId();
@@ -198,7 +198,7 @@ class Rest
 		}
 		
 		// attributes set by backend (override transmitted content)
-		$o = (object)[];
+		$o = (object)array();
 		$o->url = $resource;
 		$o->version = $json_old_resource->version + 1;
 		

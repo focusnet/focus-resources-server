@@ -7,6 +7,44 @@
  
  POST can conflict with deleted version because of retention policy
  
+ 
+ return errors as json objects?
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ important:
+ http://www.spinics.net/lists/apache-users/msg104136.html
+ I ended up figuring this out and I thought I would respond to my original message to let anyone know who stumbles on this what the problem was.
+
+Apache does not want to send arbitrary HTTP request methods to regular files. Sending a "DELETE" or "PUT" to a regular file in a document root will end up with a "405 Method not allowed", even if the method is "Allow"d (e.g. "Allow from all"... We're kind of overloading the term "Allowed" here!). That is, unless you're using dav/dav_fs, which isn't what I'm trying to do here. If the document being processed is a script, like PHP, Apache is normally willing to forward the request to the file with the REQUEST_METHOD populated.
+
+The issue comes down to how Apache integrates with PHP. In my case, under Ubuntu 12.04, there were two packages:
+
+libapache2-mod-php5 and libapache2-mod-php5filter
+
+I had accidentally installed the "libapache2-mod-php5filter" package, which integrates with Apache using the following lines:
+
+SetInputFilter PHP
+SetOutputFilter PHP
+
+These functions are specifically geared toward GET (Output) & POST (Input) operations and don't instruct Apache to pass all request methods to PHP. For all other request methods, Apache treats the .php file as a standard file. I uninstalled libapache2-mod-php5filter and installed libapache2-mod-php5, which integrates with:
+
+<FilesMatch "\.ph(p3?|tml)$">
+    SetHandler application/x-httpd-php
+</FilesMatch>
+
+The SetHandler accepts all request methods, including the PUT & DELETE I was trying to get working. Hope this helps someone out there.
+ 
+ 
+ 
+ 
+ 
+ 
  put schemas in other repo
  
  GET <resource>
