@@ -1,0 +1,8 @@
+{
+    "config": {
+        "vendor-dir": "www/contrib"
+    },
+    "require": {
+        "justinrainbow/json-schema": "~1.3"
+    }
+}
