@@ -13,8 +13,11 @@
  
  
  
- 
- 
+ json schema: a matter of perspective: schema gives 
+ 1. what the database expects
+ 	OR
+ 2. what users should send us
+ - maybe good to highlight this somehow. for example the 'version' is not mandatory for the user (e.g. PUT, POST, DELETE), but the db expects it to exist.
  
  
  important:

@@ -5,16 +5,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-require_once 'includes/Error.inc';
-require_once 'includes/Configuration.inc';
-
 /**
  * Database class
  * 
  * This is a singleton
  */
-
+namespace FocusResourcesServer;
 
 class Database
 {
@@ -65,7 +61,7 @@ class Database
 	 */
 	private function connect()
 	{
-		$this->mysqli = new mysqli(
+		$this->mysqli = new \mysqli(
 				self::$_instance->host, 
 				self::$_instance->user, 
 				self::$_instance->pass, 

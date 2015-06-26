@@ -5,11 +5,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-require_once 'includes/Error.inc';
-require_once 'includes/Validator.inc';
-require_once 'includes/Authentication.inc';
-require_once 'includes/Database.inc';
-
+namespace FocusResourcesServer;
 
 /**
  * FIXME handle version number of resources
@@ -33,11 +29,10 @@ require_once 'includes/Database.inc';
  * @author julien
  *
  */
-// FIXME set somewhere? Configuration ?
-date_default_timezone_set("UTC");
 
 
 
+// FIXME that could be static
 class Rest
 {
 	
