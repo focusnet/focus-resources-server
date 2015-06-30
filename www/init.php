@@ -4,9 +4,12 @@
 // composer autoload
 $loader = require __DIR__ . '/contrib/autoload.php';
 
-// autoload our classes
+// autoload our classes - only for the FocusResourcesServer namespace
 spl_autoload_register(function ($class_name)
 {	
+	if (strpos($class_name, 'FocusResourcesServer\\') !== 0) {
+		return;
+	}
 	$class_path = __DIR__ . '/' . str_replace('\\', '/', $class_name) . '.php';
 	if (is_readable($class_path)) {
 		require_once $class_path;

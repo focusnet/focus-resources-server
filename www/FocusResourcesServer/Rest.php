@@ -203,15 +203,10 @@ class Rest
 		$o->editor = Authentication::getInstance()->getUserId();
 		$o->editionDateTime = date('c', time());
 		$o->active = TRUE;
-		
-		// FIXME FIXME FIXME FIXME FIXME DEBUG
-	//	$o->version ="ac";
-	
+
 		// FIXME TODO: check that the announced type is the same as the one of old resource!!!!
 		$v = new Validator();
 		$o = $v->validate($jsonstring_new_resource, $o);
-		
-		
 		
 		// best effort transaction: if a new PUT, will simply delete the last created, but that's alright.
 		// FIXME but at some point active = TRUE for 2 samples !!! ==> we should NEVER rely on 'active' only to get latest version

@@ -20,7 +20,9 @@
 
 namespace FocusResourcesServer;
 
-class Validator extends JsonSchema\Uri\Retrievers\FileGetContents implements JsonSchema\Uri\Retrievers\UriRetrieverInterface
+class Validator 
+	extends \JsonSchema\Uri\Retrievers\FileGetContents 
+	implements \JsonSchema\Uri\Retrievers\UriRetrieverInterface
 {
 	/**
 	 * Constants defining the root schema. 
@@ -55,18 +57,18 @@ class Validator extends JsonSchema\Uri\Retrievers\FileGetContents implements Jso
 		}
 		
 		// setup our custom retriever
-		$retriever = new JsonSchema\Uri\UriRetriever;
+		$retriever = new \JsonSchema\Uri\UriRetriever;
 		$retriever->setUriRetriever($this); // current class implements UriRetrieverInterface
 		
 		// retrieve the schema matching the type announced with the object.
 		$schema = $retriever->retrieve($object->type);
 		
 		// resolve all '$ref's
-		$refResolver = new JsonSchema\RefResolver($retriever);
+		$refResolver = new \JsonSchema\RefResolver($retriever);
 		$refResolver->resolve($schema);
 		
 		// Validate
-		$validator = new JsonSchema\Validator();
+		$validator = new \JsonSchema\Validator();
 		$validator->check($object, $schema);
 		
 		if (!$validator->isValid()) {
@@ -92,9 +94,9 @@ class Validator extends JsonSchema\Uri\Retrievers\FileGetContents implements Jso
 	public function retrieve($uri) {
 		$orig_uri = $uri;
 		
-		$alt_root_focus_schemas = Configuration::getInstance()->getSetting('DEBUG_root_schemas_url', FALSE);
-		if ($alt_root_focus_schemas) {
-			$uri = preg_replace('|^' . self::ROOT_FOCUS_SCHEMAS . '|', $alt_root_focus_schemas, $uri);
+		$override_root_focus_schemas = Configuration::getInstance()->getSetting('DEBUG_root_schemas_url', FALSE);
+		if ($override_root_focus_schemas) {
+			$uri = preg_replace('|^' . self::ROOT_FOCUS_SCHEMAS . '|', $override_root_focus_schemas, $uri);
 		}
 		
 		$data = FALSE;
@@ -102,10 +104,9 @@ class Validator extends JsonSchema\Uri\Retrievers\FileGetContents implements Jso
 		if (!Configuration::getInstance()->getSetting('DEBUG_bypass_cache', FALSE)) {
 			$filename = Configuration::getInstance()->getSetting('schemas_cache_dir', 'cache/') . sha1($orig_uri);
 			if (is_readable($filename)) {
-				$data = file_get_contents($uri)
+				$this->messageBody = file_get_contents($filename)
 					or Error::httpApplicationError('Cannot get the requested schema from local cache.');
-				return json_decode($data)
-					or Error::httpApplicationError('Invalid schema (not a JSON object).');
+				return $this->messageBody;
 			}
 		}
 		
@@ -114,7 +115,7 @@ class Validator extends JsonSchema\Uri\Retrievers\FileGetContents implements Jso
 		
 		// do cache
 		if ($filename) {
-			file_put_contents($filename, json_encode($this->messageBody))
+			file_put_contents($filename, $this->messageBody)
 				or Error::httpApplicationError('Cannot write file to schemas cache directory.');
 		}
 		
