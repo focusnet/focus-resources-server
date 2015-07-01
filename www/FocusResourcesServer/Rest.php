@@ -43,10 +43,11 @@ class Rest
 	{
 		isset($_SERVER['REQUEST_METHOD']) or Error::httpApplicationError('Cannot be run from the command line');
 		
-		// init http exchange
-		header('Content-Type: application/json');
-		header_remove('X-Powered-By');
-		
+		// do not allow creating data outside of the /data/ directory
+		$context = preg_replace('|^' . dirname($_SERVER['SCRIPT_NAME']) . '|', '', rtrim($_SERVER['REQUEST_URI'], '/'));
+		if (!preg_match('|^/data/.+$|', $context)) {
+			Error::httpForbidden('Invalid path');
+		}
 		
 		// build the full url of the requested resource.
 		$resource = $_SERVER['REQUEST_SCHEME']

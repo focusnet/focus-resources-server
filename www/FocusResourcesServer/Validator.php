@@ -63,6 +63,10 @@ class Validator
 		// retrieve the schema matching the type announced with the object.
 		$schema = $retriever->retrieve($object->type);
 		
+		// FIXME we could add a pattern to the schema that must be respected regarding the data creation path 
+		// e.g. user-information => user/<uid>/information
+		// 		machine-sample => company/<cid>/machine/<mid>/status
+		
 		// resolve all '$ref's
 		$refResolver = new \JsonSchema\RefResolver($retriever);
 		$refResolver->resolve($schema);

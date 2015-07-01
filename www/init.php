@@ -10,7 +10,7 @@ spl_autoload_register(function ($class_name)
 	if (strpos($class_name, 'FocusResourcesServer\\') !== 0) {
 		return;
 	}
-	$class_path = __DIR__ . '/' . str_replace('\\', '/', $class_name) . '.php';
+	$class_path = __DIR__ . '/' . str_replace('\\', DIRECTORY_SEPARATOR, $class_name) . '.php';
 	if (is_readable($class_path)) {
 		require_once $class_path;
 	}
@@ -23,6 +23,10 @@ FocusResourcesServer\Configuration::getInstance()->setSettings($FOCUS_REST_CONFI
 // application-wide configurations
 ini_set('allow_url_fopen', 'on');
 date_default_timezone_set('UTC');
+
+// init http exchange
+header('Content-Type: application/json');
+header_remove('X-Powered-By');
 
 if (FocusResourcesServer\Configuration::getInstance()->getSetting('DEBUG', FALSE)) {
 	error_reporting(E_ALL);
