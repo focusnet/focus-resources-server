@@ -379,6 +379,10 @@ class Rest
 	
 	/**
 	 * Get data as a bulk GET request
+	 * 
+	 * GET /resource | /resource/v123
+	 * return:
+	 * req => [status=x, canonical=y, data=z]
 	 */
 	private function getBulkData()
 	{
