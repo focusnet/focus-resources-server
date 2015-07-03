@@ -44,7 +44,7 @@ class Validator
 	{
 		
 		$object = json_decode($json_string);
-		if (!isset($object)) {
+		if ($object === NULL) {
 			Error::httpBadRequest('Invalid JSON object.');
 		}
 

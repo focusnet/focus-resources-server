@@ -120,6 +120,23 @@ class Database
 	}
 	
 	/**
+	 * Get the last version number of specified resource
+	 */
+	public function getLatestVersionNumber($resource)
+	{
+		$query = 'SELECT version FROM samples WHERE url = "' . $this->mysqli->real_escape_string($resource) . '" ORDER BY id DESC';
+		$res = $this->mysqli->query($query);
+		if(!$res) { 
+			Error::httpApplicationError('Database connection error.');
+		}
+		
+		if (!($row = $res->fetch_row()) || !isset($row[0])) {
+			return FALSE;
+		}
+		return $row[0];
+	}
+	
+	/**
 	 * Create a new resource in the database.
 	 * 
 	 * Everything has already been sanitized.
