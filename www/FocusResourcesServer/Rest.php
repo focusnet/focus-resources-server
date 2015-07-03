@@ -63,7 +63,7 @@ class Rest
 	private function handleServiceRequest($service)
 	{
 		switch($service) {
-		case 'search-more-recent':
+		case 'check-resources-freshness':
 			print json_encode($this->searchMoreRecent());
 			break;
 		default:
@@ -274,7 +274,7 @@ class Rest
 	
 	
 	/**
-	 * Check for newer versions of resources:
+	 * Check for freshness resources:
 	 * 
 	 * - Read the input data from the incoming POST request. It consists of a 
 	 *   JSON array containing URIs of resources to check for freshness
@@ -286,7 +286,7 @@ class Rest
 	 *   
 	 *   	e.g.
 	 *   
-	 *   "http://server/data/test/1234/details/v43 => 304
+	 *   "http://server/data/test/1234/details/v43" => 304
 	 *   
 	 *   The status can be:
 	 *   
@@ -312,7 +312,7 @@ class Rest
 	 *   							the server and discard its current local 
 	 *   							copy
 	 */
-	private function searchMoreRecent() 
+	private function checkResourcesFreshness() 
 	{
 		if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 			Error::httpMethodNotAllowed(array('POST'));
