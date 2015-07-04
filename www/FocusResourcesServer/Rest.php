@@ -64,7 +64,7 @@ class Rest
 	{
 		switch($service) {
 		case 'check-resources-freshness':
-			print json_encode($this->searchMoreRecent());
+			print json_encode($this->checkResourcesFreshness());
 			break;
 		default:
 			Error::httpNotFound('Service does not exist');
