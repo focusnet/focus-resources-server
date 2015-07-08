@@ -42,7 +42,6 @@ class Validator
 	 */
 	public function validate($json_string, $override_object = FALSE) 
 	{
-		
 		$object = json_decode($json_string);
 		if ($object === NULL) {
 			Error::httpBadRequest('Invalid JSON object.');
@@ -62,15 +61,16 @@ class Validator
 		
 		// retrieve the schema matching the type announced with the object.
 		$schema = $retriever->retrieve($object->type);
-		
+	
 		// FIXME we could add a pattern to the schema that must be respected regarding the data creation path 
 		// e.g. user-information => user/<uid>/information
 		// 		machine-sample => company/<cid>/machine/<mid>/status
 		
 		// resolve all '$ref's
 		$refResolver = new \JsonSchema\RefResolver($retriever);
+		$refResolver::$maxDepth = 100;
 		$refResolver->resolve($schema);
-		
+				
 		// Validate
 		$validator = new \JsonSchema\Validator();
 		$validator->check($object, $schema);
@@ -105,6 +105,7 @@ class Validator
 		
 		$data = FALSE;
 		$filename = FALSE;
+		
 		if (!Configuration::getInstance()->getSetting('DEBUG_bypass_cache', FALSE)) {
 			$filename = Configuration::getInstance()->getSetting('schemas_cache_dir', 'cache/') . sha1($orig_uri);
 			if (is_readable($filename)) {
