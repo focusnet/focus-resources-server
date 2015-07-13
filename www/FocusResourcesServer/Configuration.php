@@ -22,6 +22,17 @@ class Configuration
 	private static $_instance = null;
 	
 	/**
+	 * Version information
+	 */
+	const APP_VERSION = '0.0.1';
+	const API_VERSION = 1;
+	
+	/**
+	 * Root uri
+	 */
+	private static $root_uri = FALSE;
+	
+	/**
 	 * Empty singleton c'tor
 	 */
 	private function __construct() {}
@@ -33,8 +44,24 @@ class Configuration
 	{
 		if(is_null(self::$_instance)) {
 			self::$_instance = new Configuration();
+			
+			// acquire root URI
+			self::$_instance->root_uri = 
+				$_SERVER['REQUEST_SCHEME']
+				. '://' . $_SERVER['SERVER_NAME']
+				. ($_SERVER['REQUEST_SCHEME'] === 'http' && $_SERVER['SERVER_PORT'] != 80 ? ':' . $_SERVER['SERVER_PORT'] : '')
+				. ($_SERVER['REQUEST_SCHEME'] === 'https' && $_SERVER['SERVER_PORT'] != 443 ? ':' . $_SERVER['SERVER_PORT'] : '')
+				. dirname($_SERVER['SCRIPT_NAME']) . '/';
 		}
 		return self::$_instance;
+	}
+	
+	/**
+	 * Get the root URI
+	 */
+	public function getRootUri()
+	{
+		return $this->root_uri;
 	}
 	
 	/**

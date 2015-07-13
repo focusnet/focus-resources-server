@@ -18,7 +18,8 @@ spl_autoload_register(function ($class_name)
 
 // configuration
 require_once 'config.php';
-FocusResourcesServer\Configuration::getInstance()->setSettings($FOCUS_REST_CONFIGURATION);
+$config = FocusResourcesServer\Configuration::getInstance();
+$config->setSettings($FOCUS_REST_CONFIGURATION);
 
 // application-wide configurations
 ini_set('allow_url_fopen', 'on');
@@ -28,7 +29,12 @@ date_default_timezone_set('UTC');
 header('Content-Type: application/json');
 header_remove('X-Powered-By');
 
-if (FocusResourcesServer\Configuration::getInstance()->getSetting('DEBUG', FALSE)) {
+// and setup the custom headers
+header('X-FOCUS-API-Version: ' . $config::API_VERSION);
+header('X-FOCUS-App-Version: ' . $config::APP_VERSION);
+header('X-FOCUS-App-Root: ' . $config->getRootUri());
+
+if ($config->getSetting('DEBUG', FALSE)) {
 	error_reporting(E_ALL);
 	ini_set('display_errors', 'on'); // FIXME DEBUG
 }
