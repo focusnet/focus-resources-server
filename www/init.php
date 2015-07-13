@@ -30,9 +30,9 @@ header('Content-Type: application/json');
 header_remove('X-Powered-By');
 
 // and setup the custom headers
-header('X-FOCUS-API-Version: ' . $config::API_VERSION);
-header('X-FOCUS-App-Version: ' . $config::APP_VERSION);
-header('X-FOCUS-App-Root: ' . $config->getRootUri());
+header('FOCUS-API-Version: ' . $config::API_VERSION);
+header('FOCUS-App-Version: ' . $config::APP_VERSION);
+header('FOCUS-App-Root: ' . $config->getRootUri());
 
 if ($config->getSetting('DEBUG', FALSE)) {
 	error_reporting(E_ALL);
