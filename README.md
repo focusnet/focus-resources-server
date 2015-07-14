@@ -46,19 +46,29 @@ Beside the information that one can find in the base focus-object object, this r
 
 In this section, we will consider that the resources server was deployed on http://data.example.org/.
 
+````
+FIXME FIXME FIXME 
+NOTE: all data are accessed / created under the data/ directory.
+e.g.
+http://data.example.org/data/my-resource/123
+and not 
+http://data.example.org/my-resource/123
+FIXME FIXME FIXME
+````
+
 The HTTP protocol is followed and appropriate status codes are returned.
 
 #### Resource creation (POST)
 
 To create a new resource, issue a POST HTTP request toward the URL of the new resource:
 
-	HTTP POST http://data.example.org/my-resource/123
+	HTTP POST http://data.example.org/data/my-resource/123
 	
 The request body will contain the JSON object representing the new resource.
 
 It is not possible to create a resource with a specific version number, i.e. the following is not valid:
 
-	HTTP POST http://data.example.org/my-resource/123/v456
+	HTTP POST http://data.example.org/data/my-resource/123/v456
 
 This request returns:
  - `HTTP 201 Created` on success. The new resource is returned in the response body and the `Content-Location` header contains the permanent address of the resource.
@@ -71,11 +81,11 @@ This request returns:
 
 To retrieve the last version of a resource, issue a GET HTTP request toward the URL of the existing resource:
 
-	HTTP GET http://data.example.org/my-resource/123
+	HTTP GET http://data.example.org/data/my-resource/123
 
 To retrieve a specific version of the same resource:
 
-	HTTP GET http://data.example.org/my-resource/123/v3
+	HTTP GET http://data.example.org/data/my-resource/123/v3
 
 This request returns:
  - `HTTP 200 FIXME` on success. The resource is returned in the response body and the `Content-Location` header contains the permanent address of the resource.
@@ -89,13 +99,13 @@ focus-data-model
 
 To upate an existing resource, issue a PUT HTTP request toward the URL of the existing resource:
 
-	HTTP PUT http://data.example.org/my-resource/123/v456
+	HTTP PUT http://data.example.org/data/my-resource/123/v456
 	
 The request body will contain the JSON object representing the new version of the resource.
 
 It is not possible to update a specific version of a resource, i.e. the following is not valid:
 
-	HTTP PUT http://data.example.org/my-resource/123/v456
+	HTTP PUT http://data.example.org/data/my-resource/123/v456
 	
 This request returns:
  - `HTTP 200 FIXME` on success. The resource is returned in the response body and the `Content-Location` header contains the permanent address of the resource.
@@ -108,7 +118,7 @@ Note that the retention policy for this resource will enforced. In some cases, t
 
 To delete an existing resource, issue a DELETE HTTP request toward the URL of the existing resource:
 
-	HTTP DELETE http://data.example.org/my-resource/123/v456
+	HTTP DELETE http://data.example.org/data/my-resource/123/v456
 	
 This request returns:
  - `HTTP 200 FIXME` on success.
