@@ -127,6 +127,82 @@ This request returns:
  
 Note that the retention policy for this resource will enforced. In some cases, the existing resource may be archived without being actually deleted.
 
+## Services
+
+### get-as-bulk
+
+TODO
+
+### check-freshness
+
+````
+/**
+ * Check for freshness resources:
+ * 
+ * - Read the input data from the incoming POST request. It consists of a 
+ *   JSON array containing URIs of resources to check for freshness
+ *   (including version number that the client end knows as the latest 
+ *   version).
+ *   
+ * - Return a JSON array key-value pairs in the following format:
+ *   REQUESTED-URI => <http-like status>
+ *   
+ *   	e.g.
+ *   
+ *   "http://server/data/test/1234/details/v43" => 304
+ *   
+ *   The status can be:
+ *   
+ *   status	HTTP description	expected client behavior
+ *   	
+ *   210	Content Different	client must retrieve the latest version
+ *								and update its local cache
+ *
+ *   304	Not Modified		client has nothing to do
+ *   
+ *   400	Bad Request			malformed client request. Likely required to 
+ *   							fix	some coding
+ *   
+ *   403	Forbidden			client must delete its local version (?)
+ *   
+ *   404	Not Found			client must delete its local version (the
+ *   							resource may have been deleted since the 
+ *   							last update)
+ *   
+ *   409	Conflict			The version on the client is more recent
+ *   							than the latest version on the server. The
+ *   							client should retrieve the latest version on
+ *   							the server and discard its current local 
+ *   							copy
+ */
+````
+
+Example of input:
+
+````
+[
+	"failing-test",
+	"http://data.example.org/data/aaaaaaaa/v12"
+]
+````
+
+And the corresponding response:
+
+````
+HTTP/1.1 200 OK
+Date: Mon, 24 Aug 2015 11:59:01 GMT
+Server: Apache/2.4.7 (Ubuntu)
+FOCUS-API-Version: 1
+FOCUS-App-Version: 0.0.1
+FOCUS-App-Root: http://data.example.org/
+Content-Length: 122
+Content-Type: application/json
+
+"[{\"failing-test\":400},{\"http:\\\/\\\/data.example.org\\\/data\\\/aaaaaaaa\\\/v12\":304}]"
+````
+
+i.e. the first URI is not valid and there is no newer version of the second one.
+
 
 ## Building and installing
 

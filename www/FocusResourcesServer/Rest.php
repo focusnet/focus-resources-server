@@ -63,7 +63,7 @@ class Rest
 	private function handleServiceRequest($service)
 	{
 		switch($service) {
-		case 'check-resources-freshness':
+		case 'check-freshness':
 			print json_encode($this->checkResourcesFreshness());
 			break;
 		default:
@@ -86,7 +86,7 @@ class Rest
 		$resource = rtrim($resource, '/');
 		
 		
-		// FIXME we accept version-specific requests only for GET. The rest applies to last object ???? ist that correct`??
+		// FIXME we accept version-specific requests only for GET. The rest applies to last recoreded object
 		$matches = array();
 		$version = FALSE;
 		if (preg_match('#^(.*)/v(\d+)$#', $resource, $matches)) {
@@ -278,7 +278,7 @@ class Rest
 	 * 
 	 * - Read the input data from the incoming POST request. It consists of a 
 	 *   JSON array containing URIs of resources to check for freshness
-	 *   (including version number that the remote end knows as the latest 
+	 *   (including version number that the client end knows as the latest 
 	 *   version).
 	 *   
 	 * - Return a JSON array key-value pairs in the following format:
@@ -331,7 +331,13 @@ class Rest
 		$ret = array();
 		foreach ($input as $url) {
 			$matches = array();
-			if (!preg_match('|^(.*)/v(\d+)$|', $url, $matches)) {
+
+			// remove trailing blah from $url
+			$url = preg_replace('/#.*$/', '', $url);
+				
+			if (FALSE === filter_var($url, FILTER_VALIDATE_URL)
+					|| !preg_match('/^https?:\/\//', $url) 
+					|| !preg_match('|^(.*)/v(\d+)$|', $url, $matches)) {
 				$ret[] = array($url => 400); // Bad request
 				continue;
 			}
