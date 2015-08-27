@@ -1,4 +1,8 @@
 [
-	"test",
-	"http://tribble:8123/FOCUS/focus-resources-server/www/data/aaaaaaaa/v1"
+	{
+		"resource": "test"
+	},
+	{
+		"resource": "http://tribble:8123/FOCUS/focus-resources-server/www/data/aaaaaaaa/v1"
+	}
 ]

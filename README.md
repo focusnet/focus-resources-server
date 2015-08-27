@@ -140,16 +140,22 @@ TODO
  * Check for freshness resources:
  * 
  * - Read the input data from the incoming POST request. It consists of a 
- *   JSON array containing URIs of resources to check for freshness
- *   (including version number that the client end knows as the latest 
- *   version).
+ *   JSON array of objects with a single "resource" key containing the URI of 
+ *   the resource to check for freshness (including version number that the 
+ *   client end knows as the latest version).
  *   
- * - Return a JSON array key-value pairs in the following format:
- *   REQUESTED-URI => <http-like status>
- *   
+ * - Return a JSON array of objects in the following format:
+ *		{
+ *			"resource": <requested-uri>,
+ *			"status": <http-like status>
+ *		}
+ *
  *   	e.g.
  *   
- *   "http://server/data/test/1234/details/v43" => 304
+ *		{
+ *			"resource": "http://server/data/test/1234/details/v43",
+ *			"status": 304
+ *		}
  *   
  *   The status can be:
  *   
@@ -181,8 +187,8 @@ Example of input:
 
 ````
 [
-	"failing-test",
-	"http://data.example.org/data/aaaaaaaa/v12"
+	{ "resource": "failing-test" },
+	{ "resource: "http://data.example.org/data/aaaaaaaa/v12" }
 ]
 ````
 
@@ -198,7 +204,7 @@ FOCUS-App-Root: http://data.example.org/
 Content-Length: 122
 Content-Type: application/json
 
-"[{\"failing-test\":400},{\"http:\\\/\\\/data.example.org\\\/data\\\/aaaaaaaa\\\/v12\":304}]"
+[{"resource":"failing-test","status":400},{"resource":"http://data.example.org/data/aaaaaaaa/v12","status":304}]
 ````
 
 i.e. the first URI is not valid and there is no newer version of the second one.

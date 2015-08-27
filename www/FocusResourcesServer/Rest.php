@@ -329,57 +329,61 @@ class Rest
 		}
 		
 		$ret = array();
-		foreach ($input as $url) {
+		foreach ($input as $resource) {
 			$matches = array();
-
+			
+			if (!isset($resource->resource)) {
+				Error::httpBadRequest('Invalid resource definition');
+			}
+			$url = $resource->resource;
+			
 			// remove trailing blah from $url
 			$url = preg_replace('/#.*$/', '', $url);
 				
 			if (FALSE === filter_var($url, FILTER_VALIDATE_URL)
 					|| !preg_match('/^https?:\/\//', $url) 
 					|| !preg_match('|^(.*)/v(\d+)$|', $url, $matches)) {
-				$ret[] = array($url => 400); // Bad request
+				$resource->status = 400; // forbidden
+				$ret[] = $resource;
 				continue;
 			}
-			$resource = $matches[1];
+			$resource_noversion = $matches[1];
 			$version = $matches[2];
 			
 			// do we have sufficient rights to access the resource?
 			// FIXME that may not be very efficient. perhaps use a service that retrieves all
 			// grants at once?
-			if (!Authentication::getInstance()->checkAccessRights($resource)) {
-				$ret[] = array($url => '403'); // forbidden
+			if (!Authentication::getInstance()->checkAccessRights($resource_noversion)) {
+				$resource->status = 403; // forbidden
+				$ret[] = $resource;
 				continue;
 			}
 			
 			// get last version for captured resource
-			$latest = Database::getInstance()->getLatestVersionNumber($resource);
+			$latest = Database::getInstance()->getLatestVersionNumber($resource_noversion);
 			
 			// 404, deleted resource?
 			// FIXME if deleted, we must tell the client to delete its copy
 			if ($latest === FALSE) {
-				$ret[] = array($url => 404); // not found
-				continue;
+				$resource->status = 404; // not found
 			}
-
-			if ($latest > $version) {
+			else if ($latest > $version) {
 				// more recent available.
-				$ret[] = array($url => 210); // content different
-				continue;
+				$resource->status = 210; // content different
 			}
 			else if ($latest < $version) {
 				// the provided version is more recent than the latest available. 
 				// so we the client has a non-existing resource. It must update.
-				$ret[] = array($url => 409); // conflict
-				continue;
+				$resource->status = 409; // conflict
 			}
 			else {
 				// same version number
-				$ret[] = array($url => 304); // not modified
-				continue;
+				$resource->status = 304; // not modified
 			}
+			$ret[] = $resource;
+
 		}
-		
+
 		return json_encode($ret);
 	}
 	
