@@ -384,7 +384,7 @@ class Rest
 
 		}
 
-		return json_encode($ret);
+		return $ret;
 	}
 	
 	/**
